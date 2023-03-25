@@ -24,7 +24,7 @@ class GuestServiceImplTest {
         bookRoomRequest.setFirstName("Samuel");
         bookRoomRequest.setCheckinDate("28-03-2023");
         bookRoomRequest.setCheckoutDate("30-03-2023");
-        bookRoomRequest.setTelephoneNumber("560435213");
+        bookRoomRequest.setTelephoneNumber("+234 (563) 450-1257");
         bookRoomRequest.setEmailAddress("dsfdadfdfds@gmail.com");
         Response response = guestService.makeRoomReservation(bookRoomRequest);
         assertEquals("Your room has been booked successfully, Kindly proceed to " +
