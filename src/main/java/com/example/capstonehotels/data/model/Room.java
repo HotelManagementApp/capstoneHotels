@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.math.BigDecimal;
 
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Document
 @Data
 public class Room {

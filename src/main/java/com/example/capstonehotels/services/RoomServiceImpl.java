@@ -20,9 +20,8 @@ public class RoomServiceImpl implements RoomService{
         Room room = new Room(addRoomRequest.getRoomNumber(),
                 addRoomRequest.getRoomType(), addRoomRequest.getRoomPrice(), addRoomRequest.getRoomStatus());
         roomRepository.save(room);
-        Response response = new Response();
-        response.setMessage("Room added successfully");
-        return response;
+        return new Response("Room added successfully");
+
     }
 
     @Override
