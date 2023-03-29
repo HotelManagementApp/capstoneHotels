@@ -1,6 +1,7 @@
 package com.example.capstonehotels.controller;
 
 import com.example.capstonehotels.dtos.request.BookRoomRequest;
+import com.example.capstonehotels.dtos.request.BookingRequest;
 import com.example.capstonehotels.dtos.request.PaymentRequest;
 import com.example.capstonehotels.dtos.response.ApiResponse;
 import com.example.capstonehotels.services.GuestService;
@@ -15,7 +16,7 @@ import java.time.ZonedDateTime;
 
 @RestController
 @RequestMapping("/capstoneHotels")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 public class GuestController {
 
     private final GuestService guestService;
@@ -54,6 +55,29 @@ public class GuestController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
+    @GetMapping("findBookingById")
+    public ResponseEntity<?> findBooking(@RequestBody BookingRequest findBookingRequest, HttpServletRequest httpServletRequest) {
+        ApiResponse apiResponse = ApiResponse.builder()
+                .statusCode(HttpStatus.OK)
+                .path(httpServletRequest.getRequestURI())
+                .timeStamp(ZonedDateTime.now())
+                .data(guestService.findBookingById(findBookingRequest))
+                .isSuccessful(true)
+                .build();
 
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
 
+    @DeleteMapping("cancelBooking")
+    public ResponseEntity<?> cancelBooking(@RequestBody BookingRequest cancelBookingRequest, HttpServletRequest httpServletRequest) {
+        ApiResponse apiResponse = ApiResponse.builder()
+                .statusCode(HttpStatus.OK)
+                .path(httpServletRequest.getRequestURI())
+                .timeStamp(ZonedDateTime.now())
+                .data(guestService.cancelBooking(cancelBookingRequest))
+                .isSuccessful(true)
+                .build();
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
 }

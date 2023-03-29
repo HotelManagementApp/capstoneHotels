@@ -5,6 +5,7 @@ import com.example.capstonehotels.data.model.PaymentStatus;
 import com.example.capstonehotels.data.model.RoomType;
 import com.example.capstonehotels.data.repository.GuestRepository;
 import com.example.capstonehotels.dtos.request.BookRoomRequest;
+import com.example.capstonehotels.dtos.request.BookingRequest;
 import com.example.capstonehotels.dtos.request.PaymentRequest;
 import com.example.capstonehotels.dtos.response.PaymentResponse;
 import com.example.capstonehotels.dtos.response.Response;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class GuestServiceImpl implements GuestService {
@@ -65,5 +67,19 @@ public class GuestServiceImpl implements GuestService {
         existingGuest.setPaymentStatus(PaymentStatus.PAYMENT_SUCCESSFUL);
         guestRepository.save(existingGuest);
         return paymentService.payment(paymentRequest);
+    }
+
+
+    @Override
+    public Response cancelBooking(BookingRequest cancelBookingRequest) {
+        Guest existingGuest = findBookingById(cancelBookingRequest);
+        guestRepository.deleteById(cancelBookingRequest.getGuestId());
+        return new Response("Your booking has been cancelled");
+    }
+
+    @Override
+    public Guest findBookingById(BookingRequest cancelBookingRequest) {
+        return guestRepository.findById(cancelBookingRequest.getGuestId()).orElseThrow(()
+                -> new CapstoneException("Data not found"));
     }
 }
