@@ -45,6 +45,12 @@ class GuestServiceImplTest {
         assertThrows(CapstoneException.class, () -> guestService.makeRoomReservation(bookRoomRequest));
     }
 
+    @Test
+    void testThatGuestCanCancelBooking() {
+        Response cancelBookingResponse = guestService.cancelBooking("641e8f40e68a40544d6a9fcf");
+        assertEquals("Your booking has been cancelled", cancelBookingResponse.getMessage());
+    }
+
 
 
 

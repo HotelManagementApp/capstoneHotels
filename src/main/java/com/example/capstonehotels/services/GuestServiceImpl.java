@@ -66,4 +66,12 @@ public class GuestServiceImpl implements GuestService {
         guestRepository.save(existingGuest);
         return paymentService.payment(paymentRequest);
     }
+
+    @Override
+    public Response cancelBooking(String guestId) {
+        Guest existingGuest = guestRepository.findById(guestId).orElseThrow(()
+                -> new CapstoneException("Data not found"));
+        guestRepository.deleteById(guestId);
+        return new Response("Your booking has been cancelled");
+    }
 }

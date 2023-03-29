@@ -11,4 +11,6 @@ public interface GuestService {
     Response makeRoomReservation(BookRoomRequest bookRoomRequest);
 
     PaymentResponse makePayment(String telephoneNumber, PaymentRequest paymentRequest) throws IOException;
+
+    Response cancelBooking(String guestId);
 }
