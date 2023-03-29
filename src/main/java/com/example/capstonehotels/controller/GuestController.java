@@ -16,7 +16,7 @@ import java.time.ZonedDateTime;
 
 @RestController
 @RequestMapping("/capstoneHotels")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 public class GuestController {
 
     private final GuestService guestService;
