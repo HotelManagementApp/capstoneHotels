@@ -2,6 +2,7 @@ package com.example.capstonehotels.services;
 
 import com.example.capstonehotels.data.model.RoomType;
 import com.example.capstonehotels.dtos.request.BookRoomRequest;
+import com.example.capstonehotels.dtos.request.BookingRequest;
 import com.example.capstonehotels.dtos.response.Response;
 import com.example.capstonehotels.utils.exceptions.CapstoneException;
 import org.junit.jupiter.api.Test;
@@ -47,7 +48,9 @@ class GuestServiceImplTest {
 
     @Test
     void testThatGuestCanCancelBooking() {
-        Response cancelBookingResponse = guestService.cancelBooking("641e8f40e68a40544d6a9fcf");
+        BookingRequest cancelBooking = new BookingRequest();
+        cancelBooking.setGuestId("641e8f40e68a40544d6a9fcf");
+        Response cancelBookingResponse = guestService.cancelBooking(cancelBooking);
         assertEquals("Your booking has been cancelled", cancelBookingResponse.getMessage());
     }
 
