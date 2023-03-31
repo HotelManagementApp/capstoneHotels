@@ -65,6 +65,8 @@ public class GuestServiceImpl implements GuestService {
         newGuest.setFirstName(bookRoomRequest.getFirstName());
         newGuest.setLastName(bookRoomRequest.getLastName());
         newGuest.setTelephoneNumber(bookRoomRequest.getTelephoneNumber());
+        if(guestRepository.findGuestByTelephoneNumber(bookRoomRequest.getTelephoneNumber()).isPresent())
+            throw new CapstoneException("A booking already exists with this telephone number, Kindly use another!!");
         if(!Validators.validatePhoneNumber(bookRoomRequest.getTelephoneNumber()))
             throw new CapstoneException("Invalid phone number, Kindly follow this format: +XXX (XXX) XXX-XXXX");
     }

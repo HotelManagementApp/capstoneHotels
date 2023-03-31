@@ -24,7 +24,7 @@ public class EmailServiceImpl implements EmailService {
         String subject = "ROOM RESERVATION";
         String content = "Hello" + " " + name + ","
                 + "<p>Thank you for making a reservation with us!!!<p/>"
-                + "<p>Your room reservation request was successful."
+                + "<p>Your room reservation request was successful. "
                 + "Here is the bookingId: <p/>" + bookingId
                 + "<p>Kindly keep this carefully as proof of payment whenever "
                 + "you want to checkin at the receptionist desk or if you want to cancel your reservation";

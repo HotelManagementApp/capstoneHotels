@@ -20,12 +20,12 @@ class GuestServiceImplTest {
     void testThatGuestCanBookRoom() {
         BookRoomRequest bookRoomRequest = new BookRoomRequest();
         bookRoomRequest.setRoomType(RoomType.SINGLE);
-        bookRoomRequest.setLastName("DrinkWater");
-        bookRoomRequest.setFirstName("Samuel");
-        bookRoomRequest.setCheckinDate("28-03-2023");
-        bookRoomRequest.setCheckoutDate("30-03-2023");
-        bookRoomRequest.setTelephoneNumber("+234 (563) 450-1257");
-        bookRoomRequest.setEmailAddress("dsfdadfdfds@gmail.com");
+        bookRoomRequest.setLastName("Peter");
+        bookRoomRequest.setFirstName("Sutherland");
+        bookRoomRequest.setCheckinDate("01-04-2023");
+        bookRoomRequest.setCheckoutDate("15-04-2023");
+        bookRoomRequest.setTelephoneNumber("+238146093346");
+        bookRoomRequest.setEmailAddress("thenightagent@gmail.com");
         Response response = guestService.makeRoomReservation(bookRoomRequest);
         assertEquals("Your room has been booked successfully, Kindly proceed to " +
                 "the payment section", response.getMessage());
