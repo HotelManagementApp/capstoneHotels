@@ -6,6 +6,7 @@ import com.example.capstonehotels.dtos.request.BookingRequest;
 import com.example.capstonehotels.dtos.request.PaymentRequest;
 import com.example.capstonehotels.dtos.response.PaymentResponse;
 import com.example.capstonehotels.dtos.response.Response;
+import jakarta.mail.MessagingException;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,9 +14,10 @@ import java.util.List;
 public interface GuestService {
     Response makeRoomReservation(BookRoomRequest bookRoomRequest);
 
-    PaymentResponse makePayment(String telephoneNumber, PaymentRequest paymentRequest) throws IOException;
+//    PaymentResponse makePayment(String telephoneNumber, PaymentRequest paymentRequest) throws IOException;
+    Response makePayment(String telephoneNumber, PaymentRequest paymentRequest) throws IOException, MessagingException;
 
-    Guest findBookingById(BookingRequest findBookingRequest);
+    Guest findBookingById(String guestId);
 
-    Response cancelBooking(BookingRequest cancelBookingRequest);
+    Response cancelBooking(String guestId);
 }

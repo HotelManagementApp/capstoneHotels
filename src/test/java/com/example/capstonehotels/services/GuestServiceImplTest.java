@@ -2,13 +2,11 @@ package com.example.capstonehotels.services;
 
 import com.example.capstonehotels.data.model.RoomType;
 import com.example.capstonehotels.dtos.request.BookRoomRequest;
-import com.example.capstonehotels.dtos.request.BookingRequest;
 import com.example.capstonehotels.dtos.response.Response;
 import com.example.capstonehotels.utils.exceptions.CapstoneException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -48,9 +46,7 @@ class GuestServiceImplTest {
 
     @Test
     void testThatGuestCanCancelBooking() {
-        BookingRequest cancelBooking = new BookingRequest();
-        cancelBooking.setGuestId("641e8f40e68a40544d6a9fcf");
-        Response cancelBookingResponse = guestService.cancelBooking(cancelBooking);
+        Response cancelBookingResponse = guestService.cancelBooking("641e8f40e68a40544d6a9fcf");
         assertEquals("Your booking has been cancelled", cancelBookingResponse.getMessage());
     }
 

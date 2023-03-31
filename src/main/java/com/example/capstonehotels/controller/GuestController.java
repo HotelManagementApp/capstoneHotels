@@ -5,6 +5,7 @@ import com.example.capstonehotels.dtos.request.BookingRequest;
 import com.example.capstonehotels.dtos.request.PaymentRequest;
 import com.example.capstonehotels.dtos.response.ApiResponse;
 import com.example.capstonehotels.services.GuestService;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,7 +43,7 @@ public class GuestController {
 
     @PostMapping("/makePayment/{telephoneNumber}")
     public ResponseEntity<?> makePayment(@PathVariable String telephoneNumber, @RequestBody PaymentRequest paymentRequest,
-                                         HttpServletRequest httpServletRequest) throws IOException {
+                                         HttpServletRequest httpServletRequest) throws IOException, MessagingException {
         var payment = guestService.makePayment(telephoneNumber, paymentRequest);
         ApiResponse apiResponse = ApiResponse.builder()
                 .statusCode(HttpStatus.OK)
@@ -55,26 +56,26 @@ public class GuestController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
-    @GetMapping("findBookingById")
-    public ResponseEntity<?> findBooking(@RequestBody BookingRequest findBookingRequest, HttpServletRequest httpServletRequest) {
+    @GetMapping("findBookingById/{guestId}")
+    public ResponseEntity<?> findBooking(@PathVariable String guestId, HttpServletRequest httpServletRequest) {
         ApiResponse apiResponse = ApiResponse.builder()
                 .statusCode(HttpStatus.OK)
                 .path(httpServletRequest.getRequestURI())
                 .timeStamp(ZonedDateTime.now())
-                .data(guestService.findBookingById(findBookingRequest))
+                .data(guestService.findBookingById(guestId))
                 .isSuccessful(true)
                 .build();
 
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
-    @DeleteMapping("cancelBooking")
-    public ResponseEntity<?> cancelBooking(@RequestBody BookingRequest cancelBookingRequest, HttpServletRequest httpServletRequest) {
+    @DeleteMapping("cancelBooking/{guestId}")
+    public ResponseEntity<?> cancelBooking(@PathVariable String guestId, HttpServletRequest httpServletRequest) {
         ApiResponse apiResponse = ApiResponse.builder()
                 .statusCode(HttpStatus.OK)
                 .path(httpServletRequest.getRequestURI())
                 .timeStamp(ZonedDateTime.now())
-                .data(guestService.cancelBooking(cancelBookingRequest))
+                .data(guestService.cancelBooking(guestId))
                 .isSuccessful(true)
                 .build();
 

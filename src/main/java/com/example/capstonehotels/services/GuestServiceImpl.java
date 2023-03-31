@@ -5,18 +5,16 @@ import com.example.capstonehotels.data.model.PaymentStatus;
 import com.example.capstonehotels.data.model.RoomType;
 import com.example.capstonehotels.data.repository.GuestRepository;
 import com.example.capstonehotels.dtos.request.BookRoomRequest;
-import com.example.capstonehotels.dtos.request.BookingRequest;
 import com.example.capstonehotels.dtos.request.PaymentRequest;
-import com.example.capstonehotels.dtos.response.PaymentResponse;
 import com.example.capstonehotels.dtos.response.Response;
 import com.example.capstonehotels.utils.Validators;
 import com.example.capstonehotels.utils.exceptions.CapstoneException;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 public class GuestServiceImpl implements GuestService {
@@ -25,10 +23,13 @@ public class GuestServiceImpl implements GuestService {
 
     private final PaymentService paymentService;
 
+    private final EmailService emailService;
+
     @Autowired
-    public GuestServiceImpl(GuestRepository guestRepository, PaymentService paymentService) {
+    public GuestServiceImpl(GuestRepository guestRepository, PaymentService paymentService, EmailService emailService) {
         this.guestRepository = guestRepository;
         this.paymentService = paymentService;
+        this.emailService = emailService;
     }
 
     @Override
@@ -36,15 +37,15 @@ public class GuestServiceImpl implements GuestService {
         Guest newGuest = new Guest();
         newGuest.setCheckinDate(bookRoomRequest.getCheckinDate());
         newGuest.setCheckoutDate(bookRoomRequest.getCheckoutDate());
-        newGuest.setEmailAddress(bookRoomRequest.getEmailAddress());
-        if(!Validators.validateEmailAddress(bookRoomRequest.getEmailAddress()))
-            throw new CapstoneException("Email is not valid");
-        newGuest.setFirstName(bookRoomRequest.getFirstName());
-        newGuest.setLastName(bookRoomRequest.getLastName());
-        newGuest.setTelephoneNumber(bookRoomRequest.getTelephoneNumber());
-        if(!Validators.validatePhoneNumber(bookRoomRequest.getTelephoneNumber()))
-            throw new CapstoneException("Invalid phone number, Kindly follow this format: +XXX (XXX) XXX-XXXX");
+        makingReservation(bookRoomRequest, newGuest);
         newGuest.setRoomType(bookRoomRequest.getRoomType());
+        settingRoomPrice(bookRoomRequest, newGuest);
+        newGuest.setPaymentStatus(PaymentStatus.PENDING);
+        guestRepository.save(newGuest);
+        return new Response("Your room has been booked successfully, Kindly proceed to the payment section");
+    }
+
+    private void settingRoomPrice(BookRoomRequest bookRoomRequest, Guest newGuest) {
         if(bookRoomRequest.getRoomType().equals(RoomType.SINGLE))
             newGuest.setRoomPrice(BigDecimal.valueOf(20000.00));
         else if (bookRoomRequest.getRoomType().equals(RoomType.DOUBLE))
@@ -55,31 +56,51 @@ public class GuestServiceImpl implements GuestService {
             newGuest.setRoomPrice(BigDecimal.valueOf(80000.00));
         else if (bookRoomRequest.getRoomType().equals(RoomType.EXECUTIVE_SUITE))
             newGuest.setRoomPrice(BigDecimal.valueOf(100000.00));
-        newGuest.setPaymentStatus(PaymentStatus.PENDING);
-        guestRepository.save(newGuest);
-        return new Response("Your room has been booked successfully, Kindly proceed to the payment section");
     }
 
+    private void makingReservation(BookRoomRequest bookRoomRequest, Guest newGuest) {
+        newGuest.setEmailAddress(bookRoomRequest.getEmailAddress());
+        if(!Validators.validateEmailAddress(bookRoomRequest.getEmailAddress()))
+            throw new CapstoneException("Email is not valid");
+        newGuest.setFirstName(bookRoomRequest.getFirstName());
+        newGuest.setLastName(bookRoomRequest.getLastName());
+        newGuest.setTelephoneNumber(bookRoomRequest.getTelephoneNumber());
+        if(!Validators.validatePhoneNumber(bookRoomRequest.getTelephoneNumber()))
+            throw new CapstoneException("Invalid phone number, Kindly follow this format: +XXX (XXX) XXX-XXXX");
+    }
+
+//    @Override
+//    public PaymentResponse makePayment(String telephoneNumber, PaymentRequest paymentRequest) throws IOException {
+//        Guest existingGuest = guestRepository.findGuestByTelephoneNumber(telephoneNumber)
+//                .orElseThrow(() -> new CapstoneException("This guest hasn't booked a room"));
+//        existingGuest.setPaymentStatus(PaymentStatus.PAYMENT_SUCCESSFUL);
+//        guestRepository.save(existingGuest);
+//        return paymentService.payment(paymentRequest);
+//    }
+
     @Override
-    public PaymentResponse makePayment(String telephoneNumber, PaymentRequest paymentRequest) throws IOException {
+    public Response makePayment(String telephoneNumber, PaymentRequest paymentRequest) throws IOException, MessagingException {
         Guest existingGuest = guestRepository.findGuestByTelephoneNumber(telephoneNumber)
-                .orElseThrow(() -> new CapstoneException("This hasn't booked a room"));
+                .orElseThrow(() -> new CapstoneException("This guest hasn't booked a room"));
+        paymentService.payment(paymentRequest);
         existingGuest.setPaymentStatus(PaymentStatus.PAYMENT_SUCCESSFUL);
         guestRepository.save(existingGuest);
-        return paymentService.payment(paymentRequest);
+        emailService.sendEmail(existingGuest.getEmailAddress(), existingGuest.getFirstName(), existingGuest.getGuestId());
+        return new Response("Payment is successful, the bookingId has been sent to your mail");
     }
 
 
+
     @Override
-    public Response cancelBooking(BookingRequest cancelBookingRequest) {
-        Guest existingGuest = findBookingById(cancelBookingRequest);
-        guestRepository.deleteById(cancelBookingRequest.getGuestId());
+    public Response cancelBooking(String guestId) {
+        Guest existingGuest = findBookingById(guestId);
+        guestRepository.deleteById(guestId);
         return new Response("Your booking has been cancelled");
     }
 
     @Override
-    public Guest findBookingById(BookingRequest cancelBookingRequest) {
-        return guestRepository.findById(cancelBookingRequest.getGuestId()).orElseThrow(()
+    public Guest findBookingById(String guestId) {
+        return guestRepository.findById(guestId).orElseThrow(()
                 -> new CapstoneException("Data not found"));
     }
 }
