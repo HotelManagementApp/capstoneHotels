@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -28,6 +29,7 @@ public class GuestController {
     }
 
     @PostMapping("/bookRoom")
+    @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<?> makeRoomsReservations(@RequestBody BookRoomRequest bookRoomRequest, HttpServletRequest httpServletRequest) {
         var bookRoom = guestService.makeRoomReservation(bookRoomRequest);
         ApiResponse apiResponse = ApiResponse.builder()

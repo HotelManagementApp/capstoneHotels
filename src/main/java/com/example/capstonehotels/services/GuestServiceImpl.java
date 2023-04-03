@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+import static com.example.capstonehotels.data.model.RoomType.SINGLE;
+
 @Service
 public class GuestServiceImpl implements GuestService {
 
@@ -38,7 +40,7 @@ public class GuestServiceImpl implements GuestService {
         newGuest.setCheckinDate(bookRoomRequest.getCheckinDate());
         newGuest.setCheckoutDate(bookRoomRequest.getCheckoutDate());
         makingReservation(bookRoomRequest, newGuest);
-        newGuest.setRoomType(bookRoomRequest.getRoomType());
+        newGuest.setRoomType(RoomType.valueOf(bookRoomRequest.getRoomType().toUpperCase()));
         settingRoomPrice(bookRoomRequest, newGuest);
         newGuest.setPaymentStatus(PaymentStatus.PENDING);
         guestRepository.save(newGuest);
@@ -46,16 +48,16 @@ public class GuestServiceImpl implements GuestService {
     }
 
     private void settingRoomPrice(BookRoomRequest bookRoomRequest, Guest newGuest) {
-        if(bookRoomRequest.getRoomType().equals(RoomType.SINGLE))
-            newGuest.setRoomPrice(BigDecimal.valueOf(20000.00));
-        else if (bookRoomRequest.getRoomType().equals(RoomType.DOUBLE))
-            newGuest.setRoomPrice(BigDecimal.valueOf(40000.00));
-        else if (bookRoomRequest.getRoomType().equals(RoomType.FAMILY))
-            newGuest.setRoomPrice(BigDecimal.valueOf(60000.00));
-        else if (bookRoomRequest.getRoomType().equals(RoomType.APARTMENT))
-            newGuest.setRoomPrice(BigDecimal.valueOf(80000.00));
-        else if (bookRoomRequest.getRoomType().equals(RoomType.EXECUTIVE_SUITE))
-            newGuest.setRoomPrice(BigDecimal.valueOf(100000.00));
+        if(bookRoomRequest.getRoomType().equalsIgnoreCase(String.valueOf(SINGLE)))
+            newGuest.setRoomPrice(BigDecimal.valueOf(20000));
+        else if (bookRoomRequest.getRoomType().equalsIgnoreCase(String.valueOf(RoomType.DOUBLE)))
+            newGuest.setRoomPrice(BigDecimal.valueOf(40000));
+        else if (bookRoomRequest.getRoomType().equalsIgnoreCase(String.valueOf(RoomType.FAMILY)))
+            newGuest.setRoomPrice(BigDecimal.valueOf(60000));
+        else if (bookRoomRequest.getRoomType().equalsIgnoreCase(String.valueOf(RoomType.APARTMENT)))
+            newGuest.setRoomPrice(BigDecimal.valueOf(80000));
+        else if (bookRoomRequest.getRoomType().equalsIgnoreCase(String.valueOf(RoomType.EXECUTIVE_SUITE)))
+            newGuest.setRoomPrice(BigDecimal.valueOf(100000));
     }
 
     private void makingReservation(BookRoomRequest bookRoomRequest, Guest newGuest) {
@@ -68,7 +70,8 @@ public class GuestServiceImpl implements GuestService {
         if(guestRepository.findGuestByTelephoneNumber(bookRoomRequest.getTelephoneNumber()).isPresent())
             throw new CapstoneException("A booking already exists with this telephone number, Kindly use another!!");
         if(!Validators.validatePhoneNumber(bookRoomRequest.getTelephoneNumber()))
-            throw new CapstoneException("Invalid phone number, Kindly follow this format: +XXX (XXX) XXX-XXXX");
+//            throw new CapstoneException("Invalid phone number, Kindly follow this format: +XXX (XXX) XXX-XXXX");
+            throw new CapstoneException("Invalid phone number");
     }
 
 //    @Override

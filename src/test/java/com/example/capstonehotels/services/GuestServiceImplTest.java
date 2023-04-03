@@ -19,13 +19,13 @@ class GuestServiceImplTest {
     @Test
     void testThatGuestCanBookRoom() {
         BookRoomRequest bookRoomRequest = new BookRoomRequest();
-        bookRoomRequest.setRoomType(RoomType.SINGLE);
-        bookRoomRequest.setLastName("Peter");
-        bookRoomRequest.setFirstName("Sutherland");
-        bookRoomRequest.setCheckinDate("01-04-2023");
-        bookRoomRequest.setCheckoutDate("15-04-2023");
-        bookRoomRequest.setTelephoneNumber("+238146093346");
-        bookRoomRequest.setEmailAddress("thenightagent@gmail.com");
+        bookRoomRequest.setRoomType(String.valueOf(RoomType.SINGLE));
+        bookRoomRequest.setLastName("Jesus");
+        bookRoomRequest.setFirstName("Christ");
+        bookRoomRequest.setCheckinDate("09-04-2023");
+        bookRoomRequest.setCheckoutDate("20-04-2023");
+        bookRoomRequest.setTelephoneNumber("08146093346");
+        bookRoomRequest.setEmailAddress("mrjesus3003@gmail.com");
         Response response = guestService.makeRoomReservation(bookRoomRequest);
         assertEquals("Your room has been booked successfully, Kindly proceed to " +
                 "the payment section", response.getMessage());
@@ -34,7 +34,7 @@ class GuestServiceImplTest {
     @Test
     void testThatGuestCanBookRoomThrowsException() {
         BookRoomRequest bookRoomRequest = new BookRoomRequest();
-        bookRoomRequest.setRoomType(RoomType.SINGLE);
+        bookRoomRequest.setRoomType(String.valueOf(RoomType.SINGLE));
         bookRoomRequest.setLastName("DrinkWater");
         bookRoomRequest.setFirstName("Samuel");
         bookRoomRequest.setCheckinDate("28-03-2023");
@@ -49,8 +49,4 @@ class GuestServiceImplTest {
         Response cancelBookingResponse = guestService.cancelBooking("641e8f40e68a40544d6a9fcf");
         assertEquals("Your booking has been cancelled", cancelBookingResponse.getMessage());
     }
-
-
-
-
 }
