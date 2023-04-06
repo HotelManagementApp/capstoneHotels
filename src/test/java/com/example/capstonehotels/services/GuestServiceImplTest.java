@@ -2,6 +2,7 @@ package com.example.capstonehotels.services;
 
 import com.example.capstonehotels.data.model.RoomType;
 import com.example.capstonehotels.dtos.request.BookRoomRequest;
+import com.example.capstonehotels.dtos.response.BookingResponse;
 import com.example.capstonehotels.dtos.response.Response;
 import com.example.capstonehotels.utils.exceptions.CapstoneException;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,8 @@ class GuestServiceImplTest {
         bookRoomRequest.setCheckoutDate("20-04-2023");
         bookRoomRequest.setTelephoneNumber("08146093346");
         bookRoomRequest.setEmailAddress("mrjesus3003@gmail.com");
-        Response response = guestService.makeRoomReservation(bookRoomRequest);
+        BookingResponse response = guestService.makeRoomReservation(bookRoomRequest);
+        System.out.println(response.getGuestId());
         assertEquals("Your room has been booked successfully, Kindly proceed to " +
                 "the payment section", response.getMessage());
     }

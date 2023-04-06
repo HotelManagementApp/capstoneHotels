@@ -6,6 +6,7 @@ import com.example.capstonehotels.data.model.RoomType;
 import com.example.capstonehotels.data.repository.GuestRepository;
 import com.example.capstonehotels.dtos.request.BookRoomRequest;
 import com.example.capstonehotels.dtos.request.PaymentRequest;
+import com.example.capstonehotels.dtos.response.BookingResponse;
 import com.example.capstonehotels.dtos.response.Response;
 import com.example.capstonehotels.utils.Validators;
 import com.example.capstonehotels.utils.exceptions.CapstoneException;
@@ -35,7 +36,7 @@ public class GuestServiceImpl implements GuestService {
     }
 
     @Override
-    public Response makeRoomReservation(BookRoomRequest bookRoomRequest) {
+    public BookingResponse makeRoomReservation(BookRoomRequest bookRoomRequest) {
         Guest newGuest = new Guest();
         newGuest.setCheckinDate(bookRoomRequest.getCheckinDate());
         newGuest.setCheckoutDate(bookRoomRequest.getCheckoutDate());
@@ -44,8 +45,10 @@ public class GuestServiceImpl implements GuestService {
         settingRoomPrice(bookRoomRequest, newGuest);
         newGuest.setPaymentStatus(PaymentStatus.PENDING);
         guestRepository.save(newGuest);
-        return new Response("Your room has been booked successfully, Kindly proceed to the payment section");
+        return new BookingResponse(newGuest.getGuestId(), 201, "Your room has been booked successfully," +
+                " Kindly proceed to the payment section");
     }
+
 
     private void settingRoomPrice(BookRoomRequest bookRoomRequest, Guest newGuest) {
         if(bookRoomRequest.getRoomType().equalsIgnoreCase(String.valueOf(SINGLE)))

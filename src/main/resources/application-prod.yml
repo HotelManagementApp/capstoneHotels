@@ -1,4 +1,4 @@
-spring:
-  mongodb:
-    init:
-      mode: always
+#spring:
+#  mongodb:
+#    init:
+#      mode: always
