@@ -1,4 +1,7 @@
 #spring:
+#  datasource:
+#    url: mongodb+srv://pelumijsh:Oluwapelumi@cluster0.7b2ybts.mongodb.net/?retryWrites=true&w=majority
+##    driver-class-name: com.mongodb
 #  mongodb:
 #    init:
 #      mode: always
