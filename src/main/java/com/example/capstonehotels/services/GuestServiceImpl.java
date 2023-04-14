@@ -100,9 +100,11 @@ public class GuestServiceImpl implements GuestService {
 
 
     @Override
-    public Response cancelBooking(String guestId) {
+    public Response cancelBooking(String guestId) throws MessagingException {
         Guest existingGuest = findBookingById(guestId);
-        guestRepository.deleteById(guestId);
+        guestRepository.deleteById(existingGuest.getGuestId());
+        emailService.sendEmailForCancellingBooking(existingGuest.getEmailAddress(), existingGuest.getFirstName(),
+                existingGuest.getGuestId());
         return new Response("Your booking has been cancelled");
     }
 

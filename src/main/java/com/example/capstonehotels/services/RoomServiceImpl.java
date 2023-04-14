@@ -88,6 +88,18 @@ public class RoomServiceImpl implements RoomService {
             roomRepository.save(foundRoom);
             return new Response("Room details have been updated successfully");
         }
+
+    @Override
+    public Room getRoomByRoomNumber(String roomNumber) {
+        return roomRepository.findRoomByRoomNumber(roomNumber).orElseThrow(()-> new
+                RoomException("room with number "+roomNumber+" does not exist"));
     }
+
+    @Override
+    public Room saveRoom(Room room) {
+        return roomRepository.save(room);
+    }
+
+}
 
 

@@ -15,4 +15,8 @@ public interface RoomService {
     List<Room> getBookedRooms();
     Response editRoomDetails( String roomId, EditRoomRequest editRoomRequest);
 
+    Room getRoomByRoomNumber(String roomNumber);
+
+    Room saveRoom(Room room);
+
 }

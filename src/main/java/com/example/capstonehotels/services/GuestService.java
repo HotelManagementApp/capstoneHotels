@@ -20,5 +20,5 @@ public interface GuestService {
 
     Guest findBookingById(String guestId);
 
-    Response cancelBooking(String guestId);
+    Response cancelBooking(String guestId) throws MessagingException;
 }
