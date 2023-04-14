@@ -5,6 +5,7 @@ import com.example.capstonehotels.dtos.request.BookRoomRequest;
 import com.example.capstonehotels.dtos.response.BookingResponse;
 import com.example.capstonehotels.dtos.response.Response;
 import com.example.capstonehotels.utils.exceptions.CapstoneException;
+import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -47,7 +48,7 @@ class GuestServiceImplTest {
     }
 
     @Test
-    void testThatGuestCanCancelBooking() {
+    void testThatGuestCanCancelBooking() throws MessagingException {
         Response cancelBookingResponse = guestService.cancelBooking("641e8f40e68a40544d6a9fcf");
         assertEquals("Your booking has been cancelled", cancelBookingResponse.getMessage());
     }

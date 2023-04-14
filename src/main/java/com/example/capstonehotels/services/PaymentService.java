@@ -35,7 +35,7 @@ public class PaymentService {
             Request request = new Request.Builder()
                     .url("https://api.paystack.co/page")
                     .post(requestBody)
-                    .addHeader("Authorization", "Bearer "+SECRET_KEY)
+                    .addHeader("Authorization", "Bearer "+ SECRET_KEY)
                     .addHeader("Content-Type", "application/json")
                     .build();
             try(ResponseBody response = okHttpClient.newCall(request).execute().body()) {
