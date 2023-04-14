@@ -32,4 +32,21 @@ public class EmailServiceImpl implements EmailService {
         messageHelper.setText(content, true);
         javaMailSender.send(message);
     }
+
+    @Override
+    public void sendEmailForCancellingBooking(String recipientEmail, String name, String bookingId) throws MessagingException {
+
+        MimeMessage message =javaMailSender.createMimeMessage();
+        MimeMessageHelper messageHelper = new MimeMessageHelper(message);
+        messageHelper.setFrom("oladejomubarakade@gmail.com");
+        messageHelper.setTo(recipientEmail);
+        String subject = "CANCEL BOOKING";
+        String content = "Dear" + " " + name + ","
+                + "<p>Your booking with the id "+bookingId+" has been canceled successfully<p/>"
+                + "<p>Kindly reach out to us as soon as possible if you didn't initiate that. "
+                + "Thank you! God bless you!";
+        messageHelper.setSubject(subject);
+        messageHelper.setText(content, true);
+        javaMailSender.send(message);
+    }
 }

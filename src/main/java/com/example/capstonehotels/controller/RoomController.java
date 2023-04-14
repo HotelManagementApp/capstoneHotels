@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/room")
-@CrossOrigin(origins = "http://localhost:3000/")
+@CrossOrigin(origins = "*")
 public class RoomController {
     @Autowired
     private RoomService roomService;
@@ -43,5 +43,8 @@ public class RoomController {
     public ResponseEntity<?> editRoomDetails(@PathVariable String id, @RequestBody EditRoomRequest editRoomRequest){
         return ResponseEntity.ok(roomService.editRoomDetails(id, editRoomRequest));
     }
-
+    @GetMapping("/find-room-by-room-number/{roomNumber}")
+    public ResponseEntity<?> getRoomByRoomNumber(@PathVariable String roomNumber){
+        return ResponseEntity.ok(roomService.getRoomByRoomNumber(roomNumber));
+    }
 }

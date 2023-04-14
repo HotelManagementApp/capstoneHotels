@@ -72,7 +72,8 @@ public class GuestController {
     }
 
     @DeleteMapping("cancelBooking/{guestId}")
-    public ResponseEntity<?> cancelBooking(@PathVariable String guestId, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<?> cancelBooking(@PathVariable String guestId, HttpServletRequest httpServletRequest)
+            throws MessagingException {
         ApiResponse apiResponse = ApiResponse.builder()
                 .statusCode(HttpStatus.OK)
                 .path(httpServletRequest.getRequestURI())
